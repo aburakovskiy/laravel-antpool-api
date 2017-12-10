@@ -1,0 +1,16 @@
+{
+    "name": "aburakovskiy/laravel-antpool-api",
+    "description": "Antpool PHP API Client for Laravel",
+    "type": "library",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Alexander Burakovskiy",
+            "email": "alexander.burakovskiy@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.6"
+    }
+}
