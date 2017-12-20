@@ -12,5 +12,17 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.6"
-    }
+    },
+    "autoload": {
+        "psr-4": {
+            "Aburakovskiy\\LaravelAntpoolApi\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aburakovskiy\\LaravelAntpoolApi\\AntpoolServiceProvider"
+            ]
+        }
+    },
 }
