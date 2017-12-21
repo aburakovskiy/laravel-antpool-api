@@ -57,3 +57,6 @@ $account = Antpool::get('account');
 
 ## Antpool API
 - [Antpool API Developer Guide](https://www.antpool.com/user/apiGuild.htm)
+
+## Credits
+Built on code from Elompenta's [antpool-php-api](https://github.com/Elompenta/antpool-php-api).
