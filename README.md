@@ -49,7 +49,7 @@ ANTPOOL_SECRET = SECRET
 ## Usage
 
 ```php
-// use Aburakovskiy\LaravelAntpoolApi\Facades\Antpool;
+use Aburakovskiy\LaravelAntpoolApi\Facades\Antpool;
 
 // Return an account info
 $account = Antpool::get('account');
