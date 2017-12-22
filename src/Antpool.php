@@ -1,8 +1,19 @@
 <?php
 
 /**
- * @package aburakovskiy\laravel-antpool-api
- * @author Alexander Burakovskiy <alexander.burakovskiy@gmail.com>
+ *** original antpool-php-api release
+ * @author      Sebastian Lutz <lutz@baebeca.de>
+ * @copyright   Baebeca Solutions
+ * @email       lutz@baebeca.de
+ * @pgp         0x5AD0240C
+ * @link        https://www.baebeca.de
+ * @link-github https://github.com/Elompenta/antpool-php-api
+ * @project     antpool-php-api
+ * @license     GNU GENERAL PUBLIC LICENSE Version 2
+ *
+ *** forked laravel-antpool-api
+ * @package     aburakovskiy\laravel-antpool-api
+ * @author      Alexander Burakovskiy <alexander.burakovskiy@gmail.com>
  */
 namespace Aburakovskiy\LaravelAntpoolApi;
 
@@ -23,7 +34,7 @@ class Antpool
 
     /**
      * Constructor
-     * $antpool = new Antpool(['key' => 'KEY HERE'])
+     * $antpool = new Antpool(ANTPOOL_USERNAME, ANTPOOL_API_KEY, ANTPOOL_API_SECRET)
      *
      * @param string $username
      * @param string $key
@@ -45,6 +56,7 @@ class Antpool
      * Make API call
      *
      * @param string $type
+     * @param string $coin BTC, LTC, ETH, ZEC, DAS
      * @return mixed
      * @throws \Exception
      */
@@ -80,7 +92,7 @@ class Antpool
      *
      * @param string $type
      * @param array $post_fields
-     * @param array $post_data
+     * @param string $post_data
      * @return mixed
      * @throws \Exception
      */
