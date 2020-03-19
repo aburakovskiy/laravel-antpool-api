@@ -31,6 +31,10 @@ class Antpool
      * @var string
      */
     protected $secret;
+    /**
+     * @var int
+     */
+    protected $page_size;
 
     /**
      * Constructor
@@ -39,9 +43,10 @@ class Antpool
      * @param string $username
      * @param string $key
      * @param string $secret
+     * @param int $page_size
      * @throws \Exception
      */
-    public function __construct($username, $key, $secret)
+    public function __construct($username, $key, $secret, $page_size = 10)
     {
         if (!function_exists('curl_exec')) {
             throw new \Exception("Error: Please install PHP curl extension to use this lib.");
@@ -50,6 +55,7 @@ class Antpool
         $this->username = $username;
         $this->key = $key;
         $this->secret = $secret;
+        $this->page_size = $page_size;
     }
 
     /**
@@ -70,7 +76,8 @@ class Antpool
             'key' => $this->key,
             'nonce' => $nonce,
             'signature' => $hmac,
-            'coin' => $coin
+            'coin' => $coin,
+            'pageSize' => $this->page_size
         );
 
         $post_data = '';

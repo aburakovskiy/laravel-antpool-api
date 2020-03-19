@@ -16,5 +16,9 @@ return [
     /*
      * Api key
      */
-    'api_secret' => env('ANTPOOL_SECRET')
+    'api_secret' => env('ANTPOOL_SECRET'),
+    /*
+     * Page Size
+     */
+    'page_size' => env('ANTPOOL_PAGE_SIZE')
 ];
