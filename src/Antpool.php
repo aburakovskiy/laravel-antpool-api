@@ -53,14 +53,25 @@ class Antpool
     }
 
     /**
+     * Test if the type can support the pageSize parameter
+     *
+     * @param $type
+     * @return bool
+     */
+    function hasPageSizeParameter($type) {
+        return $type === 'workers' || $type === 'paymentHistory';
+    }
+
+    /**
      * Make API call
      *
      * @param string $type
      * @param string $coin BTC, LTC, ETH, ZEC, DAS
+     * @param int $page_size default 10
      * @return mixed
      * @throws \Exception
      */
-    public function get($type, $coin = 'BTC')
+    public function get($type, $coin = 'BTC', $page_size = 10)
     {
         $nonce = time();
         $hmac_message = $this->username . $this->key . $nonce;
@@ -70,8 +81,11 @@ class Antpool
             'key' => $this->key,
             'nonce' => $nonce,
             'signature' => $hmac,
-            'coin' => $coin
+            'coin' => $coin,
         );
+
+        if($this->hasPageSizeParameter($type))
+            $post_fields = array_merge( $post_fields, array('pageSize' => $page_size));
 
         $post_data = '';
         foreach ($post_fields as $key => $value) {
