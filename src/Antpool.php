@@ -85,7 +85,7 @@ class Antpool
         );
 
         if($this->hasPageSizeParameter($type))
-            array_merge( $post_fields, array('pageSize' => $page_size));
+            $post_fields = array_merge( $post_fields, array('pageSize' => $page_size));
 
         $post_data = '';
         foreach ($post_fields as $key => $value) {
