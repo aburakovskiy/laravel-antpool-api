@@ -2,7 +2,7 @@
     "name": "aburakovskiy/laravel-antpool-api",
     "description": "Antpool PHP API Client for Laravel",
     "type": "library",
-    "license": "GPL",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Alexander Burakovskiy",
