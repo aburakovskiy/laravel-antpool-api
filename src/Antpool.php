@@ -31,10 +31,6 @@ class Antpool
      * @var string
      */
     protected $secret;
-    /**
-     * @var int
-     */
-    protected $page_size;
 
     /**
      * Constructor
@@ -43,10 +39,9 @@ class Antpool
      * @param string $username
      * @param string $key
      * @param string $secret
-     * @param int $page_size
      * @throws \Exception
      */
-    public function __construct($username, $key, $secret, $page_size = 10)
+    public function __construct($username, $key, $secret)
     {
         if (!function_exists('curl_exec')) {
             throw new \Exception("Error: Please install PHP curl extension to use this lib.");
@@ -55,7 +50,16 @@ class Antpool
         $this->username = $username;
         $this->key = $key;
         $this->secret = $secret;
-        $this->page_size = $page_size;
+    }
+
+    /**
+     * Test if the type can support the pageSize parameter
+     *
+     * @param $type
+     * @return bool
+     */
+    function hasPageSizeParameter($type) {
+        return $type === 'workers' || $type === 'paymentHistory';
     }
 
     /**
@@ -63,10 +67,11 @@ class Antpool
      *
      * @param string $type
      * @param string $coin BTC, LTC, ETH, ZEC, DAS
+     * @param int $page_size default 10
      * @return mixed
      * @throws \Exception
      */
-    public function get($type, $coin = 'BTC')
+    public function get($type, $coin = 'BTC', $page_size = 10)
     {
         $nonce = time();
         $hmac_message = $this->username . $this->key . $nonce;
@@ -77,8 +82,10 @@ class Antpool
             'nonce' => $nonce,
             'signature' => $hmac,
             'coin' => $coin,
-            'pageSize' => $this->page_size
         );
+
+        if($this->hasPageSizeParameter($type))
+            array_push ( $post_fields, ['pageSize' => $page_size]);
 
         $post_data = '';
         foreach ($post_fields as $key => $value) {

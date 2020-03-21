@@ -28,7 +28,7 @@ class AntpoolServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('antpool', function () {
-            return new Antpool(config('antpool.username'), config('antpool.api_key'), config('antpool.api_secret'), config('antpool.page_size'));
+            return new Antpool(config('antpool.username'), config('antpool.api_key'), config('antpool.api_secret'));
         });
     }
 
