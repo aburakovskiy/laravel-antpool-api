@@ -68,10 +68,11 @@ class Antpool
      * @param string $type
      * @param string $coin BTC, LTC, ETH, ZEC, DAS
      * @param int $page_size default 10
+     * @param int $page
      * @return mixed
      * @throws \Exception
      */
-    public function get($type, $coin = 'BTC', $page_size = 10)
+    public function get($type, $coin = 'BTC', $page_size = 10, $page = 1)
     {
         $nonce = time();
         $hmac_message = $this->username . $this->key . $nonce;
@@ -82,6 +83,7 @@ class Antpool
             'nonce' => $nonce,
             'signature' => $hmac,
             'coin' => $coin,
+            'page' => $page,
         );
 
         if($this->hasPageSizeParameter($type))
