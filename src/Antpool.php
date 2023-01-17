@@ -17,6 +17,9 @@
  */
 namespace Aburakovskiy\LaravelAntpoolApi;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
+
 class Antpool
 {
     /**
@@ -68,10 +71,11 @@ class Antpool
      * @param string $type
      * @param string $coin BTC, LTC, ETH, ZEC, DAS
      * @param int $page_size default 10
+     * @param int $page
      * @return mixed
      * @throws \Exception
      */
-    public function get($type, $coin = 'BTC', $page_size = 10)
+    public function get($type, $coin = 'BTC', $page_size = 10, $page = 1)
     {
         $nonce = time();
         $hmac_message = $this->username . $this->key . $nonce;
@@ -82,6 +86,7 @@ class Antpool
             'nonce' => $nonce,
             'signature' => $hmac,
             'coin' => $coin,
+            'page' => $page,
         );
 
         if($this->hasPageSizeParameter($type))
@@ -93,8 +98,7 @@ class Antpool
         }
         rtrim($post_data, '&');
 
-        $apiData = $this->api_get($type, $post_fields, $post_data);
-        return $apiData;
+        return $this->api_get($type, $post_fields, $post_data);
     }
 
     /*
@@ -108,37 +112,23 @@ class Antpool
      * @param array $post_fields
      * @param string $post_data
      * @return mixed
-     * @throws \Exception
+     * @throws \Exception|\GuzzleHttp\Exception\GuzzleException
      */
     public function api_get($type, $post_fields, $post_data)
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://antpool.com/api/' . $type . '.htm');
-        // todo: switch to public cert
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POST, count($post_fields));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        // set large timeout because API lak sometimes
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-        $result = curl_exec($ch);
-        curl_close($ch);
+        $client = new Client();
+        $response = json_decode($client->request(
+            'POST',
+            'https://antpool.com/api/' . $type . '.htm?'.$post_data,
+            ["headers" => [
+                'Accept' => 'application/json',
+            ]]
+        )->getBody()->getContents());
 
-        // check if curl was timed out
-        if ($result === false) {
-            throw new \Exception('Error: No API connect');
-        }
-
-        // validate JSON
-        $result_json = json_decode($result, true);
-        if (json_last_error() != JSON_ERROR_NONE) {
-            throw new \Exception('Error: read broken JSON from API - JSON Error: ' . json_last_error() . ' (' . $result . ')');
-        }
-
-        if ($result_json['message'] == 'ok') {
-            return $result_json['data'];
+        if ($response->message === 'ok') {
+            return $response->data;
         } else {
-            throw new \Exception('API Error: ' . print_r($result_json, true));
+            throw new \Exception('API Error: ' . print_r($response, true));
         }
     }
 }
